@@ -15,8 +15,6 @@ export class HomeComponent implements OnInit {
 
   }
   ngAfterViewInit() {
-    console.log(jQuery("#sortable"));
-    jQuery("#sortable").sortable();
   }
 
 }

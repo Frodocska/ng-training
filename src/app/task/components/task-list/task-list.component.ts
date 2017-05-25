@@ -15,12 +15,14 @@ export class TaskListComponent implements OnInit {
   public tasks: Task[];
   public loading = true;
   public selectedValue: Task;
+  private _counter: number;
 
   public constructor(private _taskService: TaskService) {
   }
 
   public ngOnInit() {
     this.loadTasks();
+    this._counter = 0;
     //jquery ui sortable-t nem tudtam rákötni, h maguk a task-ok észrevegyék h bármi is változott :(
     //jQuery( "#sortable" ).sortable();
     //jQuery( "#sortable" ).disableSelection();    
@@ -58,8 +60,27 @@ export class TaskListComponent implements OnInit {
 
   public transferDataSuccess($event: any) {
     console.log('on drop successfull');
-    this.loading = true;
-    this.loading = !this._taskService.saveTasks(this.tasks);
+    
+    this._counter = 0;
+    this.saveTasks();
   }
+  public saveTasks() {
+    this.loading = true;
+    for (const task of this.tasks) {
+        this._counter++;
+        this._taskService.update(task,
+        {
+          success: updatedTask => {
+            this._counter--;
+            if (this._counter === 0) {
+              this.loading = false;
+            }
+          },
+          error: error => {this.loading = false;},
+          finally: () => {}
+        }
+      );
+    }
+  };
 }
 

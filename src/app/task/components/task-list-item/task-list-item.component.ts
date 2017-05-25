@@ -32,8 +32,8 @@ export class TaskListItemComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
 
     if ((changes['position'])) {
-      console.log(`Is First Change: ${changes['position'].isFirstChange}`)
-      console.log(this.task.name + `name change from ${changes['position'].previousValue} to ${changes['position'].currentValue}`);
+      //console.log(`Is First Change: ${changes['position'].isFirstChange}`)
+      //console.log(this.task.name + `name change from ${changes['position'].previousValue} to ${changes['position'].currentValue}`);
 
       if (this.task.position != this.position) {
         this.task.position = this.position;

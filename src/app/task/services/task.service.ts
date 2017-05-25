@@ -55,11 +55,12 @@ export class TaskService {
   }
   
   public saveTasks(tasks: Task[]) {
+    this._counter++;
     for (const task of tasks) {
         console.log(task);
         this.update(task,
         {
-          success: updatedTask => {this._counter++;},
+          success: updatedTask => {this._counter--;},
           error: error => {},
           finally: () => {}
         }

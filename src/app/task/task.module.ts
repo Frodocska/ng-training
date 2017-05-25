@@ -8,12 +8,14 @@ import {
   TaskService,
   AgePipe
 } from './task.barrel';
+import {DndModule} from 'ng2-dnd';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    TaskRoutingModule
+    TaskRoutingModule,
+    DndModule.forRoot()
   ],
   declarations: [
     TaskListComponent,

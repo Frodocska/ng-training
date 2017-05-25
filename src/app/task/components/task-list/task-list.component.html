@@ -2,14 +2,30 @@
   My Tasks
   <img *ngIf="loading" src="assets/loader.gif">
 </h3>
-<ul>
-  <li *ngFor="let task of tasks">
-    <app-task-list-item
+
+<button type="button" class="btn btn-default" (click)="addNewTask()" [disabled]="loading">Add New Task</button>
+ 
+ <ul class="list-group" dnd-sortable-container  [sortableData]="tasks"  >
+<li *ngFor="let task of tasks; let i = index"  dnd-sortable [sortableIndex]="i" class="list-group-item"  (onDropSuccess)="transferDataSuccess($event)" >
+   	<app-task-list-item  
       [task]="task"
       [disabled]="loading"
       (onError)="loadTasks()"
       (onDelete)="removeTask($event)"
-    ></app-task-list-item>
-  </li>
+      [position]="i"
+    ></app-task-list-item>    
+ </li>
 </ul>
-<button type="button" class="btn btn-default" (click)="addNewTask()" [disabled]="loading">Add New Task</button>
+<!--
+<ul class="list-group" id="sortable">
+<li *ngFor="let task of tasks; let i = index"  class="list-group-item" >
+   	<app-task-list-item  
+      [task]="task"
+      [disabled]="loading"
+      (onError)="loadTasks()"
+      (onDelete)="removeTask($event)"
+      [position]="i"
+    ></app-task-list-item>    
+ </li>
+</ul> 
+ -->

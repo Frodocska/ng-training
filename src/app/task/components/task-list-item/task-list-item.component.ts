@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges  } from '@angular/core';
 
 import {
   Task,
@@ -20,16 +20,29 @@ export class TaskListItemComponent implements OnInit {
   @Input() public task: Task;
   @Output() public onError = new EventEmitter();
   @Output() public onDelete = new EventEmitter<Task>();
-
+  @Input() public position: number;
+  
   public constructor(private _taskService: TaskService) {
     //
   }
 
   public ngOnInit() {
-    //
+    this.position = this.task.position;
   }
+  ngOnChanges(changes: SimpleChanges) {
 
+    if ((changes['position'])) {
+      console.log(`Is First Change: ${changes['position'].isFirstChange}`)
+      console.log(this.task.name + `name change from ${changes['position'].previousValue} to ${changes['position'].currentValue}`);
+
+      if (this.task.position != this.position) {
+        this.task.position = this.position;
+        //this.updateTask(this.task);
+      }
+    }
+  }
   public updateTask(task: Task) {
+    
     this.loading = true;
     this._taskService.update(
       task,
@@ -55,5 +68,4 @@ export class TaskListItemComponent implements OnInit {
       }
     )
   }
-
 }

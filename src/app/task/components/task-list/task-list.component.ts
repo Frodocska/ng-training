@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 
 import {
   Task,
-  TaskService
+  TaskService,
+TaskListItemComponent
 } from '../../task.barrel';
-
+declare var jQuery: any;
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
@@ -12,41 +13,53 @@ import {
 })
 export class TaskListComponent implements OnInit {
   public tasks: Task[];
-  public loading: boolean = true;
+  public loading = true;
+  public selectedValue: Task;
 
   public constructor(private _taskService: TaskService) {
-    //
   }
 
   public ngOnInit() {
     this.loadTasks();
+    //jquery ui sortable-t nem tudtam rákötni, h maguk a task-ok észrevegyék h bármi is változott :(
+    //jQuery( "#sortable" ).sortable();
+    //jQuery( "#sortable" ).disableSelection();    
   }
 
   public loadTasks() {
     this.loading = true;
     this._taskService.list({
-      success: response => this.tasks = response,
+      success: response => {
+          this.tasks = response;
+        },
       finally: () => this.loading = false
     });
   }
 
   public addNewTask() {
     this.loading = true;
-    let task = new Task();
+    const task = new Task();
     task.name = 'New Task';
+    task.position = 100;
     this._taskService.create(
       task,
       {
         finally: () => this.loadTasks()
       }
-    )
+    );
   }
 
   public removeTask(task: Task) {
-    let index: number = this.tasks.indexOf(task);
+    const index: number = this.tasks.indexOf(task);
     if (index !== -1) {
       this.tasks.splice(index, 1);
     }
   }
 
+  public transferDataSuccess($event: any) {
+    console.log('on drop successfull');
+    this.loading = true;
+    this.loading = !this._taskService.saveTasks(this.tasks);
+  }
 }
+

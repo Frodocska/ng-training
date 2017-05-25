@@ -7,7 +7,7 @@ import { Task } from '../task.barrel';
 
 @Injectable()
 export class TaskService {
-
+  private _counter = 0;
   public constructor(private _apiService: ApiService) {
     //
   }
@@ -53,5 +53,19 @@ export class TaskService {
       responseConfig
     );
   }
+  
+  public saveTasks(tasks: Task[]) {
+    for (const task of tasks) {
+        console.log(task);
+        this.update(task,
+        {
+          success: updatedTask => {this._counter++;},
+          error: error => {},
+          finally: () => {}
+        }
+      );
+    }
+    return true;
+  };
 
 }
